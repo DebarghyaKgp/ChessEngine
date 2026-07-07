@@ -79,7 +79,7 @@ class Board:
             self.bitboards[(cap_color, cap_piece)] &= ~ (1 << to_sq)
 
         self.bitboards[(color, piece)] &= ~(1 << from_sq)
-        self.bitboards[(color, piece)] |= ~(1 << to_sq)
+        self.bitboards[(color, piece)] |= (1 << to_sq)
 
         self.side_to_move = BLACK if self.side_to_move == WHITE else WHITE
         return True
@@ -98,5 +98,3 @@ class Board:
         print()
 
 
-b = Board()
-b.print_board()

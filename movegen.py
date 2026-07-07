@@ -6,7 +6,7 @@ def _knight_attacks_from(sq):
     deltas = [(1, 2), (2, 1), (1, -2), (-2, 1), (2, -1), (-1, 2), (-1, -2), (-2, -1)]
     for dr, df in deltas:
         nr, nf = r + dr, f + df
-        if 0 <= nr < 8 and 0 < nf < 8:
+        if 0 <= nr < 8 and 0 <= nf < 8:
             attacks |= 1 << (nr * 8 + nf)
     
     return attacks
@@ -19,9 +19,9 @@ def _king_attacks_from(sq):
         for df in (-1, 0, 1):
             if dr == 0 and df == 0:
                 continue
-        nr, nf = r + dr, f + df
-        if 0 <= nr < 8 and 0 <= nf < 8:
-            attacks |= (1 << (nr * 8 + nf))
+            nr, nf = r + dr, f + df
+            if 0 <= nr < 8 and 0 <= nf < 8:
+                attacks |= (1 << (nr * 8 + nf))
     
     return attacks
 
@@ -59,7 +59,7 @@ def bishop_attacks(sq, occupied):
     return _sliding_attacks(sq, occupied, BISHOP_DIRS)
 
 def queen_attacks(sq, occupied):
-    return rook_attacks(sq, occupied) | bishop_attacks(sq, occupied)
+    return (rook_attacks(sq, occupied) | bishop_attacks(sq, occupied))
 
 
 def pawn_capture_targets(sq, color):
@@ -102,7 +102,7 @@ def generate_pseudo_legal_moves(board, color):
                 targets = rook_attacks(sq, occ) & ~own
             
             elif piece == QUEEN:
-                targets = rook_attacks(sq, occ) & ~own
+                targets = queen_attacks(sq, occ) & ~own
             
             elif piece == BISHOP:
                 targets = bishop_attacks(sq, occ) & ~ own

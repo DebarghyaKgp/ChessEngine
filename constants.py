@@ -41,9 +41,9 @@ PIECE_SYMBOLS = {
 # Using unicode glyphs, so that no external sprites need not be used
 UNICODE_PIECES = {
     'P': '\u2659', 'p':'\u265F',
-    'R': '\u2658', 'r':'\u265E',
-    'N': '\u2657', 'n':'\u265D',
-    'B': '\u2656', 'b':'\u265C',
+    'N': '\u2658', 'n':'\u265E',
+    'B': '\u2657', 'b':'\u265D',
+    'R': '\u2656', 'r':'\u265C',
     'Q': '\u2655', 'q':'\u265B',
     'K': '\u2654', 'k':'\u265A'
 }
