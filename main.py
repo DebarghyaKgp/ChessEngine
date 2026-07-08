@@ -3,7 +3,8 @@ import pygame
 
 from constants import PIECE_SYMBOLS, UNICODE_PIECES, WHITE, BLACK, QUEEN, ROOK, BISHOP, KNIGHT
 from board import Board
-from movegen import generate_legal_moves, is_in_check, is_checkmate, is_stalemate
+from movegen import (generate_legal_moves, is_in_check, is_checkmate,
+                      is_stalemate, is_insufficient_material)
 
 SQUARE_SIZE = 80
 BOARD_SIZE = SQUARE_SIZE * 8
@@ -157,6 +158,8 @@ def main():
                 game_over_message = f"Checkmate -- {winner} wins!"
             elif is_stalemate(board, board.side_to_move):
                 game_over_message = "Stalemate -- draw!"
+            elif is_insufficient_material(board):
+                game_over_message = "Draw -- insufficient material!"
 
         draw_board(screen)
         if selected_sq is not None:

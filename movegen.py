@@ -213,3 +213,42 @@ def is_stalemate(board, color):
     return (not is_in_check(board, color)) and len(generate_legal_moves(board, color)) == 0
 
 
+LIGHT_SQUARES = 0x55AA55AA55AA55AA  # a1 is dark square
+
+def is_insufficient_material(board):
+    """
+    True if neither side has enough material to force checkmate:
+      K vs K | K+N vs K | K+B vs K | K+B vs K+B with same-colored bishops.
+    Any pawn, rook, or queen on the board means mate is still possible -> False.
+    """
+    if (board.bitboards[(WHITE, PAWN)] or board.bitboards[(BLACK, PAWN)]
+            or board.bitboards[(WHITE, ROOK)] or board.bitboards[(BLACK, ROOK)]
+            or board.bitboards[(WHITE, QUEEN)] or board.bitboards[(BLACK, QUEEN)]):
+        return False
+ 
+    white_knights = bin(board.bitboards[(WHITE, KNIGHT)]).count('1')
+    black_knights = bin(board.bitboards[(BLACK, KNIGHT)]).count('1')
+    white_bishops_bb = board.bitboards[(WHITE, BISHOP)]
+    black_bishops_bb = board.bitboards[(BLACK, BISHOP)]
+    white_bishops = bin(white_bishops_bb).count('1')
+    black_bishops = bin(black_bishops_bb).count('1')
+ 
+    white_minor = white_knights + white_bishops
+    black_minor = black_knights + black_bishops
+ 
+    # K vs K
+    if white_minor == 0 and black_minor == 0:
+        return True
+ 
+    # K+one minor vs K
+    if (white_minor == 1 and black_minor == 0) or (white_minor == 0 and black_minor == 1):
+        return True
+ 
+    # K+B vs K+B, same-colored bishops (no knights involved)
+    if white_minor == 1 and black_minor == 1 and white_knights == 0 and black_knights == 0:
+        white_on_light = bool(white_bishops_bb & LIGHT_SQUARES)
+        black_on_light = bool(black_bishops_bb & LIGHT_SQUARES)
+        if white_on_light == black_on_light:
+            return True
+ 
+    return False
